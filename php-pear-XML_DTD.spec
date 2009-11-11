@@ -1,22 +1,21 @@
 %define		_class		XML
 %define		_subclass	DTD
-%define		_status		alpha
-%define		_pearname	%{_class}_%{_subclass}
+%define		upstream_name	%{_class}_%{_subclass}
 
-Summary:	%{_pearname} - parsing of DTD files and DTD validation of XML files
-Name:		php-pear-%{_pearname}
+Name:		php-pear-%{upstream_name}
 Version:	0.5.1
-Release:	%mkrel 2
+Release:	%mkrel 3
+Summary:	Parsing of DTD files and DTD validation of XML files
 License:	PHP License
 Group:		Development/PHP
-Source0:	http://pear.php.net/get/%{_pearname}-%{version}.tgz
 URL:		http://pear.php.net/package/XML_DTD/
+Source0:	http://download.pear.php.net/package/%{upstream_name}-%{version}.tgz
 Requires(post): php-pear
 Requires(preun): php-pear
 Requires:	php-pear
 BuildArch:	noarch
-BuildRequires:	dos2unix
-BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
+BuildRequires:	php-pear
+BuildRoot:	%{_tmppath}/%{name}-%{version}
 
 %description
 Parsing of DTD files and DTD validation of XML files. The XML
@@ -27,61 +26,44 @@ Currently supports most of current XML specification, including
 entities, elements and attributes. Some uncommon parts of the
 specification may still be unsupported.
 
-In PEAR status of this package is: %{_status}.
-
 %prep
-
 %setup -q -c
-
-find . -type d -perm 0700 -exec chmod 755 {} \;
-find . -type f -perm 0555 -exec chmod 755 {} \;
-find . -type f -perm 0444 -exec chmod 644 {} \;
-
-for i in `find . -type d -name CVS` `find . -type f -name .cvs\*` `find . -type f -name .#\*`; do
-    if [ -e "$i" ]; then rm -rf $i; fi >&/dev/null
-done
-
-# strip away annoying ^M
-find -type f | grep -v ".gif" | grep -v ".png" | grep -v ".jpg" | xargs dos2unix -U
+mv package.xml %{upstream_name}-%{version}/%{upstream_name}.xml
 
 %install
 rm -rf %{buildroot}
 
-install -d %{buildroot}%{_datadir}/pear/%{_class}/%{_subclass}
+cd %{upstream_name}-%{version}
+pear install --nodeps --packagingroot %{buildroot} %{upstream_name}.xml
+rm -rf %{buildroot}%{_datadir}/pear/.??*
 
-install %{_pearname}-%{version}/*.php %{buildroot}%{_datadir}/pear/%{_class}
-install %{_pearname}-%{version}/%{_subclass}/*.php %{buildroot}%{_datadir}/pear/%{_class}/%{_subclass}
+rm -rf %{buildroot}%{_datadir}/pear/docs
+rm -rf %{buildroot}%{_datadir}/pear/tests
 
 install -d %{buildroot}%{_datadir}/pear/packages
-install -m0644 package.xml %{buildroot}%{_datadir}/pear/packages/%{_pearname}.xml
-
-%post
-if [ "$1" = "1" ]; then
-	if [ -x %{_bindir}/pear -a -f %{_datadir}/pear/packages/%{_pearname}.xml ]; then
-		%{_bindir}/pear install --nodeps -r %{_datadir}/pear/packages/%{_pearname}.xml
-	fi
-fi
-if [ "$1" = "2" ]; then
-	if [ -x %{_bindir}/pear -a -f %{_datadir}/pear/packages/%{_pearname}.xml ]; then
-		%{_bindir}/pear upgrade -f --nodeps -r %{_datadir}/pear/packages/%{_pearname}.xml
-	fi
-fi
-
-%preun
-if [ "$1" = 0 ]; then
-	if [ -x %{_bindir}/pear -a -f %{_datadir}/pear/packages/%{_pearname}.xml ]; then
-		%{_bindir}/pear uninstall --nodeps -r %{_pearname}
-	fi
-fi
+install -m 644 %{upstream_name}.xml %{buildroot}%{_datadir}/pear/packages
 
 %clean
 rm -rf %{buildroot}
 
+%post
+%if %mdkversion < 201000
+pear install --nodeps --soft --force --register-only \
+    %{_datadir}/pear/packages/%{upstream_name}.xml >/dev/null || :
+%endif
+
+%preun
+%if %mdkversion < 201000
+if [ "$1" -eq "0" ]; then
+    pear uninstall --nodeps --ignore-errors --register-only \
+        %{pear_name} >/dev/null || :
+fi
+%endif
+
 %files
-%defattr(644,root,root,755)
-%doc %{_pearname}-%{version}/{README.txt,TODO.txt,tests}
-%{_datadir}/pear/%{_class}/*.php
-%{_datadir}/pear/%{_class}/%{_subclass}
-%{_datadir}/pear/packages/%{_pearname}.xml
+%defattr(-,root,root)
+%doc %{upstream_name}-%{version}/*.txt
+%{_datadir}/pear/%{_class}
+%{_datadir}/pear/packages/%{upstream_name}.xml
 
 
