@@ -3,8 +3,8 @@
 %define		upstream_name	%{_class}_%{_subclass}
 
 Name:		php-pear-%{upstream_name}
-Version:	0.5.1
-Release:	%mkrel 5
+Version:	0.5.2
+Release:	%mkrel 1
 Summary:	Parsing of DTD files and DTD validation of XML files
 License:	PHP License
 Group:		Development/PHP
