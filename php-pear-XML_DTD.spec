@@ -3,13 +3,13 @@
 %define		upstream_name	%{_class}_%{_subclass}
 
 Name:		php-pear-%{upstream_name}
-Version:	0.5.1
-Release:	8
+Version:	0.5.2
+Release:	1
 Summary:	Parsing of DTD files and DTD validation of XML files
 License:	PHP License
 Group:		Development/PHP
 URL:		http://pear.php.net/package/XML_DTD/
-Source0:	http://download.pear.php.net/package/%{upstream_name}-%{version}.tgz
+Source0:	http://download.pear.php.net/package/XML_DTD-%{version}.tgz
 Requires(post): php-pear
 Requires(preun): php-pear
 Requires:	php-pear
@@ -119,4 +119,5 @@ install -m 644 %{upstream_name}.xml %{buildroot}%{_datadir}/pear/packages
 
 * Tue Jul 19 2005 Oden Eriksson <oeriksson@mandriva.com> 0.4.2-1mdk
 - initial Mandriva package (PLD import)
+
 
