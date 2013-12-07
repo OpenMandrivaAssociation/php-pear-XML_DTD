@@ -5,7 +5,7 @@
 Summary:	Parsing of DTD files and DTD validation of XML files
 Name:		php-pear-%{modname}
 Version:	0.5.2
-Release:	3
+Release:	4
 License:	PHP License
 Group:		Development/PHP
 Url:		http://pear.php.net/package/XML_DTD/
