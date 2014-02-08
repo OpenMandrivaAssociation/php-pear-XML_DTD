@@ -4,7 +4,7 @@
 
 Name:		php-pear-%{upstream_name}
 Version:	0.5.2
-Release:	1
+Release:	2
 Summary:	Parsing of DTD files and DTD validation of XML files
 License:	PHP License
 Group:		Development/PHP
