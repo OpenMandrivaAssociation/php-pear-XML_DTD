@@ -8,7 +8,7 @@ Version:	0.5.2
 Release:	11
 License:	PHP License
 Group:		Development/PHP
-Url:		http://pear.php.net/package/XML_DTD/
+Url:		https://pear.php.net/package/XML_DTD/
 Source0:	http://download.pear.php.net/package/XML_DTD-%{version}.tgz
 BuildArch:	noarch
 BuildRequires:	php-pear
